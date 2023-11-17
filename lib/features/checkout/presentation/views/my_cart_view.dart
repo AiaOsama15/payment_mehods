@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:payment_gateway_new/features/checkout/data/model/payment_intent_input.dart';
+import 'package:payment_gateway_new/features/checkout/data/repos/checkout_repo_impl.dart';
+import 'package:payment_gateway_new/features/checkout/presentation/manager/payment_cubit.dart';
+import 'package:payment_gateway_new/features/checkout/presentation/views/thanks_view.dart';
 
 import '../../../../core/utils/styles.dart';
 import '../../../../core/widgets/app_bar.dart';
@@ -87,7 +92,10 @@ class MyCart extends StatelessWidget {
                     ),
                   ),
                   builder: (context) {
-                    return const PaymentMethodsBottomSheet();
+                    return BlocProvider(
+                      create: (context) => PaymentCubit(CheckoutRepoImp()),
+                      child: const PaymentMethodsBottomSheet(),
+                    );
                   },
                 );
               },
@@ -167,7 +175,9 @@ class TotalPrice extends StatelessWidget {
 }
 
 class PaymentMethodsBottomSheet extends StatelessWidget {
-  const PaymentMethodsBottomSheet({super.key});
+  const PaymentMethodsBottomSheet({super.key, this.isLoading = false});
+
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -183,23 +193,62 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          Container(
-            width: double.infinity,
-            height: 60,
-            decoration: ShapeDecoration(
-              color: const Color(
-                0xFF34A853,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                'Continue',
-                style: Styles.style22,
-              ),
-            ),
+          BlocConsumer<PaymentCubit, PaymentStates>(
+            listener: (context, state) {
+              if (state is PaymentSuccess) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const ThanksView(),
+                  ),
+                );
+              }
+              if (state is PaymentFailed) {
+                Navigator.pop(context);
+                SnackBar snackBar = SnackBar(
+                  content: Text(
+                    state.errorMessage,
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  snackBar,
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state is PaymentLoading) {
+                return const CircularProgressIndicator();
+              } else {
+                return GestureDetector(
+                  onTap: () {
+                    PaymentIntentInput paymentIntentInput = PaymentIntentInput(
+                      amount: "100",
+                      currency: "usd",
+                    );
+                    BlocProvider.of<PaymentCubit>(context).makePayment(
+                      paymentIntentInput: paymentIntentInput,
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 60,
+                    decoration: ShapeDecoration(
+                      color: const Color(
+                        0xFF34A853,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Continue',
+                        style: Styles.style22,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
