@@ -1,5 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
+import 'package:payment_gateway_new/core/utils/api_keys.dart';
+import 'package:payment_gateway_new/features/checkout/data/model/amount_model.dart';
+import 'package:payment_gateway_new/features/checkout/data/model/details.dart';
+import 'package:payment_gateway_new/features/checkout/data/model/item.dart';
+import 'package:payment_gateway_new/features/checkout/data/model/items_list_model.dart';
 import 'package:payment_gateway_new/features/checkout/data/model/payment_intent_input.dart';
 import 'package:payment_gateway_new/features/checkout/data/repos/checkout_repo_impl.dart';
 import 'package:payment_gateway_new/features/checkout/presentation/manager/payment_cubit.dart';
@@ -10,7 +18,19 @@ import '../../../../core/widgets/app_bar.dart';
 import 'payment_details.dart';
 
 class MyCart extends StatelessWidget {
-  const MyCart({super.key});
+  MyCart({super.key});
+
+  final List<String> orderInfo = [
+    "Order Subtotal",
+    "Discount",
+    "Shipping",
+  ];
+
+  final List<String> orderData = [
+    "\$ 42.97",
+    "\$ 0",
+    "\$ 8",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +57,26 @@ class MyCart extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            const OrderInfoItem(
-              title: 'Order Subtotal',
-              value: '\$ 42.97',
-            ),
-            const SizedBox(
-              height: 3,
-            ),
-            const OrderInfoItem(
-              title: 'Discount',
-              value: '\$ 0',
-            ),
-            const SizedBox(
-              height: 3,
-            ),
-            const OrderInfoItem(
-              title: 'Shipping',
-              value: '\$ 8',
+            ListView.separated(
+              itemBuilder: (context, index) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    orderInfo[index],
+                    style: Styles.style18,
+                  ),
+                  Text(
+                    orderData[index],
+                    style: Styles.style18,
+                  ),
+                ],
+              ),
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 10,
+              ),
+              itemCount: orderInfo.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
             ),
             const SizedBox(
               height: 17,
@@ -78,12 +101,6 @@ class MyCart extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => PaymentDetailsView(),
-                //   ),
-                // );
-
                 showModalBottomSheet(
                   context: context,
                   shape: RoundedRectangleBorder(
@@ -124,29 +141,6 @@ class MyCart extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class OrderInfoItem extends StatelessWidget {
-  const OrderInfoItem({super.key, required this.title, required this.value});
-
-  final String title, value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          title,
-          style: Styles.style18,
-        ),
-        const Spacer(),
-        Text(
-          value,
-          style: Styles.style18,
-        ),
-      ],
     );
   }
 }
@@ -220,13 +214,18 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
               } else {
                 return GestureDetector(
                   onTap: () {
-                    PaymentIntentInput paymentIntentInput = PaymentIntentInput(
-                      amount: "100",
-                      currency: "usd",
-                    );
-                    BlocProvider.of<PaymentCubit>(context).makePayment(
-                      paymentIntentInput: paymentIntentInput,
-                    );
+                    // PaymentIntentInput paymentIntentInput = PaymentIntentInput(
+                    //   amount: "100",
+                    //   currency: "usd",
+                    //   customerId: "cus_P1r3odudAIcxPn",
+                    // );
+                    // BlocProvider.of<PaymentCubit>(context).makePayment(
+                    //   paymentIntentInput: paymentIntentInput,
+                    // );
+
+                    var transactionsData = getTransactions();
+
+                    executePaypalPayment(context, transactionsData);
                   },
                   child: Container(
                     width: double.infinity,
@@ -253,5 +252,69 @@ class PaymentMethodsBottomSheet extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void executePaypalPayment(BuildContext context, ({AmountModel amount, ItemListModel itemList}) transactionsData) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => PaypalCheckoutView(
+          sandboxMode: true,
+          clientId: ApiKeys.clientId,
+          secretKey: ApiKeys.paypalSecretKey,
+          transactions: [
+            {
+              "amount": transactionsData.amount.toJson(),
+              "description":
+                  "The payment transaction description.",
+              "item_list": transactionsData.itemList.toJson(),
+            }
+          ],
+          note: "Contact us for any questions on your order.",
+          onSuccess: (Map params) async {
+            log("onSuccess: $params");
+            Navigator.pop(context);
+          },
+          onError: (error) {
+            log("onError: $error");
+            Navigator.pop(context);
+          },
+          onCancel: () {
+            print('cancelled:');
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  ({AmountModel amount, ItemListModel itemList}) getTransactions() {
+    var amount = AmountModel(
+      total: "100",
+      currency: "USD",
+      details: Details(
+        shipping: "0",
+        shippingDiscount: 0,
+        subtotal: "100",
+      ),
+    );
+
+    List<OrderItemModel> orders = [
+      OrderItemModel(
+        currency: "USD",
+        name: "Apple",
+        price: "4",
+        quantity: 10,
+      ),
+      OrderItemModel(
+        currency: "USD",
+        name: "Apple",
+        price: "5",
+        quantity: 12,
+      ),
+    ];
+
+    var itemList = ItemListModel(orders: orders);
+
+    return (amount: amount, itemList: itemList);
   }
 }

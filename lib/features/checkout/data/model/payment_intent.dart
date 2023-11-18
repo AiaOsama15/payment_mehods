@@ -5,39 +5,39 @@ class PaymentIntentModel {
   late final num amountCapturable;
   late final AmountDetails amountDetails;
   late final num amountReceived;
-  late final Null application;
-  late final Null applicationFeeAmount;
+  late final void application;
+  late final void applicationFeeAmount;
   late final AutomaticPaymentMethods automaticPaymentMethods;
-  late final Null canceledAt;
-  late final Null cancellationReason;
+  late final void canceledAt;
+  late final void cancellationReason;
   late final String captureMethod;
   late final String clientSecret;
   late final String confirmationMethod;
   late final num created;
   late final String currency;
-  late final Null customer;
+  late final void customer;
   late final String description;
-  late final Null invoice;
-  late final Null lastPaymentError;
-  late final Null latestCharge;
+  late final void invoice;
+  late final void lastPaymentError;
+  late final void latestCharge;
   late final bool livemode;
   late final Metadata metadata;
-  late final Null nextAction;
-  late final Null onBehalfOf;
-  late final Null paymentMethod;
-  late final Null paymentMethodConfigurationDetails;
+  late final void nextAction;
+  late final void onBehalfOf;
+  late final void paymentMethod;
+  late final void paymentMethodConfigurationDetails;
   late final PaymentMethodOptions paymentMethodOptions;
   late final List<String> paymentMethodTypes;
-  late final Null processing;
-  late final Null receiptEmail;
-  late final Null review;
-  late final Null setupFutureUsage;
-  late final Null shipping;
-  late final Null statementDescriptor;
-  late final Null statementDescriptorSuffix;
+  late final void processing;
+  late final void receiptEmail;
+  late final void review;
+  late final void setupFutureUsage;
+  late final void shipping;
+  late final void statementDescriptor;
+  late final void statementDescriptorSuffix;
   late final String status;
-  late final Null transferData;
-  late final Null transferGroup;
+  late final void transferData;
+  late final void transferGroup;
 
   PaymentIntentModel.fromJson(Map<String, dynamic> json){
     id = json['id'] ?? "";
@@ -120,9 +120,9 @@ class PaymentMethodOptions {
 }
 
 class Card {
-  late final Null installments;
-  late final Null mandateOptions;
-  late final Null network;
+  late final void installments;
+  late final void mandateOptions;
+  late final void network;
   late final String requestThreeDSecure;
 
   Card.fromJson(Map<String, dynamic> json){
