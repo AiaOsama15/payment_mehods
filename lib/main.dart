@@ -1,24 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:payment_gateway_new/core/utils/api_keys.dart';
 
-import 'features/checkout/presentation/views/my_cart_view.dart';
+import 'package:flutter/material.dart';
+import 'package:payment_gateway_new/check_out_featcher/presentation/views/my_app.dart';
 
 void main() {
-  Stripe.publishableKey = ApiKeys.publishKey;
-  runApp(const CheckOutApp());
+  // Stripe.publishableKey = stripePublishableKey;
+  runApp(const MyApp());
 }
-
-class CheckOutApp extends StatelessWidget {
-  const CheckOutApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyCart(),
-    );
-  }
-}
-
 
