@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/helper_methods.dart/build_app_bar.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/widgets/cart_items.dart';
@@ -13,7 +12,7 @@ class MyCartView extends StatelessWidget {
     return Scaffold(
       appBar: customAppBar('My Cart', () {}),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 11),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
         child: SingleChildScrollView(
           child: Column(children: [
             hSizeBox,
@@ -23,6 +22,13 @@ class MyCartView extends StatelessWidget {
               Expanded(
                 child: CustomElevateButton(
                   textOfButton: 'Complete Payment',
+                  onPressed: () {
+                    // showBottomSheet(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return ;
+                    //     });
+                  },
                 ),
               ),
             ]),

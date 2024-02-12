@@ -17,11 +17,11 @@ class _PaymentItemsDetailsState extends State<PaymentItemsDetails> {
   List<String> listPaymentImage = [
     'assets/credit.png',
     'assets/paypal.png',
-    'assets/applepay.png'
   ];
-  bool isActive = false;
+  // bool isActive = false;
 
   int selectedIndex = 0;
+  bool isActive = false;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -35,11 +35,15 @@ class _PaymentItemsDetailsState extends State<PaymentItemsDetails> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                setState(() {});
-                isActive = selectedIndex == index;
-                // isActive = true;
+                setState(() {
+                  selectedIndex = index;
+
+                 
+                });
+               
               },
-              child: buildImageContainer(listPaymentImage[index], isActive),
+              child: buildImageContainer(
+                  listPaymentImage[index], isActive = selectedIndex == index),
             );
           }),
     );

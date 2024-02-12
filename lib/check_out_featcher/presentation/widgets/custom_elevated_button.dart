@@ -5,12 +5,15 @@ import 'package:payment_gateway_new/core/utilis/style.dart';
 // ignore: must_be_immutable
 class CustomElevateButton extends StatelessWidget {
   String? textOfButton;
-  CustomElevateButton({super.key, required this.textOfButton});
+     Function() ?onPressed;
+  CustomElevateButton({super.key, required this.textOfButton,
+ required this.onPressed
+     });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed ,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),

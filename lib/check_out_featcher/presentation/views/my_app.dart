@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:payment_gateway_new/check_out_featcher/presentation/views/my_cart_view.dart';
+import 'package:payment_gateway_new/check_out_featcher/presentation/views/payment_details.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/views/thank_you_view.dart';
 
 class MyApp extends StatelessWidget {
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const ThankYouView(),
+      home: const PaymentDetails(),
     );
   }
 }

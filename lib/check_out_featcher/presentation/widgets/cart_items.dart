@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/helper_methods.dart/build_text_row.dart';
 import 'package:payment_gateway_new/core/utilis/constant.dart';
@@ -24,7 +23,7 @@ class CartItems extends StatelessWidget {
           ),
         ),
       ),
-      hSizeBox,
+      vhSizeBox,
       customTextRow('Order Subtotal', Style.textStyle18, '45.0'),
       hSizeBox,
       customTextRow('Discount', Style.textStyle18, '4'),
@@ -37,7 +36,7 @@ class CartItems extends StatelessWidget {
       ),
       hSizeBox,
       customTextRow('Total', Style.textStyle25, '8'),
-     vhSizeBox
+      vhSizeBox
     ]);
   }
 }

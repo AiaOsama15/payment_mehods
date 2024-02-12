@@ -20,7 +20,7 @@ abstract class Style {
     color: Colors.black,
     fontSize: 18,
     fontFamily: 'Inter',
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     height: 0,
   );
   static const TextStyle textStyle18bold = TextStyle(
