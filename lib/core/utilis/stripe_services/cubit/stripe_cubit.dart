@@ -6,14 +6,21 @@ import 'package:payment_gateway_new/core/utilis/stripe_services/stripe_services.
 class StripeCubit extends Cubit<StripeStates> {
   StripeCubit() : super(StripeInitialState());
   //call stripe3 methods
-  stripePayment({required PaymentInputModel paymentInputModel})async {
+  stripePayment({required PaymentInputModel paymentInputModel}) async {
     try {
       emit(StripeLoadingState());
-    var data =await  StripeServices()
+      print('StripeLoadingState');
+      var data = await StripeServices()
           .makeFullPaymentSteps(paymentInputModel: paymentInputModel);
       emit(StripeSucessState());
+      print('StripeServices is : $data');
     } catch (e) {
-      emit(FailerState(errorMassage: e.toString()));
+      emit(
+        FailerState(
+          errorMassage: e.toString(),
+        ),
+      );
+      print('errorMassage is: $e');
     }
   }
 }

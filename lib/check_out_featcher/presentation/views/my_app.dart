@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const PaymentDetails(),
+      home: const MyCartView(),
     );
   }
 }

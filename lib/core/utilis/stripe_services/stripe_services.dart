@@ -11,10 +11,11 @@ class StripeServices {
   Future<OutputPaymentIntentModel> createPaymentMethod(
       {required PaymentInputModel paymentInputModel}) async {
     Response response = await apisServicesObj.post(
-        url: 'https://api.stripe.com/v1/payment_intents',
+        url: "https://api.stripe.com/v1/payment_intents",
         token: SecretKeys.secretKey,
-        contentType: Headers.contentEncodingHeader,
+        contentType: Headers.formUrlEncodedContentType,
         data: paymentInputModel.toJison());
+    print('response apis is ${response.data}');
     var paymentReturnRes = OutputPaymentIntentModel.fromJson(response.data);
     return paymentReturnRes;
   }

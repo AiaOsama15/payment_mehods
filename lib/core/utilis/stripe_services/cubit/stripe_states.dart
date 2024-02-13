@@ -4,6 +4,7 @@ class StripeInitialState extends StripeStates {}
 class FailerState extends StripeStates {
   String errorMassage ;
   FailerState({required this.errorMassage});
+ 
 }
 
 class ServerFailerState extends StripeStates {

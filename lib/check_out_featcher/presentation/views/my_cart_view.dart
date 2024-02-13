@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/helper_methods.dart/build_app_bar.dart';
+import 'package:payment_gateway_new/check_out_featcher/presentation/views/payment_details.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/widgets/cart_items.dart';
 import 'package:payment_gateway_new/check_out_featcher/presentation/widgets/custom_elevated_button.dart';
 import 'package:payment_gateway_new/core/utilis/constant.dart';
@@ -10,7 +11,7 @@ class MyCartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar('My Cart', () {}),
+      appBar: customAppBar('My Cart', context),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
         child: SingleChildScrollView(
@@ -23,11 +24,11 @@ class MyCartView extends StatelessWidget {
                 child: CustomElevateButton(
                   textOfButton: 'Complete Payment',
                   onPressed: () {
-                    // showBottomSheet(
-                    //     context: context,
-                    //     builder: (BuildContext context) {
-                    //       return ;
-                    //     });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PaymentDetails(),),
+                    );
                   },
                 ),
               ),

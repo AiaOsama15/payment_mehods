@@ -8,12 +8,14 @@ class ApisServices {
       required String token,
       Object? data,
       String? contentType}) async {
-    return await dio.post(
+    Response response = await dio.post(
       url,
       data: data,
-      options: Options(
-          contentType: 'application/x-www-form-urlencoded',
-          headers: {'Authorization': "Bearer $token"}),
+      options: Options(headers: {
+        'Authorization': "Bearer $token",
+      }, contentType: contentType),
     );
+
+    return response;
   }
 }
